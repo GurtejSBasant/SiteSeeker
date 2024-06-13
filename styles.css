@@ -1,0 +1,175 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.search-container {
+    width: 100%;
+    background-color: #000;
+    border: 2px solid #000;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.search-container input {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    width: 300px;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0056b3;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.search-container button:hover {
+    background-color: #004494;
+}
+
+.content-container {
+    margin-top: 60px;
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#dataDisplay {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+/* styles.css */
+
+/* Existing CSS styles */
+
+/* styles.css */
+
+/* Existing CSS styles */
+
+.fetch-container {
+    display: flex;
+    flex-direction: column; /* Display items vertically */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.fetch-container input[type="text"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-bottom: 10px; /* Add margin to the bottom */
+}
+
+.fetch-buttons {
+    display: flex;
+    flex-direction: row; /* Align buttons horizontally */
+    gap: 10px;
+}
+
+.fetch-buttons button {
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fetch-buttons button:hover {
+    background-color: #45a049;
+}
+
+
+
+#companyDetails {
+    margin-top: 20px;
+    width: 80%;
+    max-width: 800px;
+    z-index: 0;
+}
+
+#pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+}
+
+#pagination button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0056b3;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+#pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.company-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 20px;
+}
+
+.company-item h3 {
+    margin: 0 0 10px;
+}
+
+.company-item p {
+    margin: 5px 0;
+}
+
+.company-item a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.company-item a:hover {
+    text-decoration: underline;
+}
+
+.job-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+}
+
+.job-box p {
+    margin: 5px 0;
+}
+
+/* styles.css */
+
+/* Existing CSS styles */
+
+

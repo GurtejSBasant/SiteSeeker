@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Enter search term">
+        <button id="searchButton">Search</button>
+    </div>
+    <div class="content-container">
+        <div class="fetch-container">
+            <input type="text" id="domainInput" placeholder="Enter company domain">
+            <div class="fetch-buttons">
+                <button id="employeeFetchButton">Fetch Employees</button>
+                <button id="managerFetchButton">Fetch Managers</button>
+            </div>
+        </div>
+        <div id="dataDisplay"></div>
+    </div>
+    <div id="companyDetails"></div>
+    <div id="pagination">
+        <button id="previousButton" onclick="previousPage()">Previous</button>
+        <button id="nextButton" onclick="nextPage()">Next</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
