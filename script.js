@@ -1,41 +1,63 @@
 document.getElementById('searchButton').addEventListener('click', search);
 document.getElementById('employeeFetchButton').addEventListener('click', fetchEmployees);
-document.getElementById('managerFetchButton').addEventListener('click', fetchManagers); // New button
+document.getElementById('managerFetchButton').addEventListener('click', fetchManagers);
 
 let currentPage = 0;
 
 async function search() {
     const searchTerm = document.getElementById('searchInput').value;
     const dataDisplay = document.getElementById('dataDisplay');
+    const searchButton = document.getElementById('searchButton');
     dataDisplay.innerHTML = 'Searching...';
+    searchButton.disabled = true;
 
     try {
-        const response = await fetch(`https://stagingsourcebae.shethink.in/remote/search?term=${encodeURIComponent(searchTerm)}`, {
-            mode: 'cors',
+        const response = await fetchWithTimeout(`https://stagingsourcebae.shethink.in/remote/search?term=${encodeURIComponent(searchTerm)}`, {
+            mode: 'cors'
         });
+
         const searchData = await response.json();
-        
-        if (!Array.isArray(searchData) || searchData.length === 0) {
-            // If the response is not an array or if it's empty, display a custom message
+        console.log("searchdata:",searchData)
+        console.log('Initial search response:', searchData); // Debug log
+
+        if (!Array.isArray(searchData.jobs) || searchData.jobs.length === 0) {
             dataDisplay.innerHTML = 'No results found on this website. Searching on other websites...';
             await searchCompanies(searchTerm, currentPage);
         } else {
-            // Display the search results
             displayData(searchData);
-            // Proceed with searching on other websites
             await searchCompanies(searchTerm, currentPage);
         }
     } catch (error) {
-        console.error('Error searching:', error);
+        console.error('Error during search:', error);
         dataDisplay.innerHTML = `Error: ${error.message}`;
-        // Proceed with searching on other websites even if there's an error
         await searchCompanies(searchTerm, currentPage);
+    } finally {
+        searchButton.disabled = false;
     }
 }
 
+function fetchWithTimeout(url, options = {}, timeout = 0) {
+    return new Promise((resolve, reject) => {
+        const fetchPromise = fetch(url, options);
 
-
-
+        if (timeout > 0) {
+            const timeoutId = setTimeout(() => reject(new Error('Request timed out')), timeout);
+            fetchPromise
+                .then(response => {
+                    clearTimeout(timeoutId);
+                    resolve(response);
+                })
+                .catch(err => {
+                    clearTimeout(timeoutId);
+                    reject(err);
+                });
+        } else {
+            fetchPromise
+                .then(response => resolve(response))
+                .catch(err => reject(err));
+        }
+    });
+}
 
 function displayData(response) {
     const dataDisplay = document.getElementById('dataDisplay');
@@ -77,7 +99,7 @@ async function fetchEmployeeEmail(apiKey, fullName, companyDomain) {
         const firstName = nameParts[0];
         const lastName = nameParts.slice(1).join(' ');
 
-        const response = await fetch('https://stagingsourcebae.shethink.in/remote//fetch-employees-emails', {
+        const response = await fetch('https://stagingsourcebae.shethink.in/remote/fetch-employees-emails', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -93,6 +115,7 @@ async function fetchEmployeeEmail(apiKey, fullName, companyDomain) {
         });
 
         const data = await response.json();
+        console.log('Employee email response:', data); // Debug log
 
         if (data && data.person) {
             const person = data.person;
@@ -189,16 +212,22 @@ async function searchCompanies(query, currentPage) {
     }
 
     try {
-        const response = await fetch(`https://stagingsourcebae.shethink.in/scraper/algolia?query=${query}&page=${currentPage}&hitsPerPage=10`, {
+        const response = await fetch(`https://stagingsourcebae.shethink.in/scraper?query=${query}&page=${currentPage}&hitsPerPage=10`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        const result = await response.json();
-        const companyIds = result.allCompanyIds;
 
-        await fetchYcombinatorData(query, companyIds);
+        const result = await response.json();
+        console.log('Search companies response:', result); // Debug log
+
+        const companyIds = result.allCompanyIds;
+        if (companyIds && companyIds.length > 0) {
+            await fetchYcombinatorData(query, companyIds);
+        } else {
+            console.log('No company IDs found in response'); // Debug log
+        }
     } catch (error) {
         console.error('Error fetching companies:', error);
     }
@@ -222,7 +251,9 @@ async function fetchEmployees() {
                 q_organization_domains: domain
             })
         });
+
         const employeeData = await response.json();
+        console.log('Employee data response:', employeeData); // Debug log
         displayEmployees(employeeData);
     } catch (error) {
         console.error('Error fetching employees:', error);
@@ -236,7 +267,7 @@ async function fetchManagers() {
         return;
     }
 
-    console.log('Fetching managers for domain:', domain); // Add console log
+    console.log('Fetching managers for domain:', domain); // Debug log
 
     try {
         const response = await fetch('https://stagingsourcebae.shethink.in/remote/fetch-employees', {
@@ -250,16 +281,14 @@ async function fetchManagers() {
                 person_seniorities: ["manager"] // Include person_seniorities as requested
             })
         });
+
         const managerData = await response.json();
-
-        console.log('Manager data:', managerData); // Add console log
-
+        console.log('Manager data response:', managerData); // Debug log
         displayManagers(managerData); // New function for displaying manager data
     } catch (error) {
         console.error('Error fetching managers:', error);
     }
 }
-
 
 function displayEmployees(data) {
     const dataDisplay = document.getElementById('dataDisplay');
@@ -319,7 +348,6 @@ function displayEmployees(data) {
 }
 
 // New function for displaying manager data
-// New function for displaying manager data
 function displayManagers(data) {
     const dataDisplay = document.getElementById('dataDisplay');
     dataDisplay.innerHTML = '';
@@ -377,7 +405,6 @@ function displayManagers(data) {
     });
 }
 
-
 function nextPage() {
     currentPage++;
     search();
@@ -389,4 +416,3 @@ function previousPage() {
         search();
     }
 }
-
