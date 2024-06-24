@@ -1,6 +1,7 @@
 document.getElementById('searchButton').addEventListener('click', search);
 document.getElementById('employeeFetchButton').addEventListener('click', fetchEmployees);
 document.getElementById('managerFetchButton').addEventListener('click', fetchManagers);
+document.getElementById('C-levelFetchButton').addEventListener('click', fetcClevel);
 
 let currentPage = 0;
 
@@ -284,6 +285,37 @@ async function fetchManagers() {
 
         const managerData = await response.json();
         console.log('Manager data response:', managerData); // Debug log
+        displayManagers(managerData); // New function for displaying manager data
+    } catch (error) {
+        console.error('Error fetching managers:', error);
+    }
+}
+
+
+async function fetcClevel() {
+    const domain = document.getElementById('domainInput').value;
+    if (domain === '') {
+        alert('Please enter a company domain.');
+        return;
+    }
+
+    console.log('Fetching managers for domain:', domain); // Debug log
+
+    try {
+        const response = await fetch('https://stagingsourcebae.shethink.in/remote/fetch-employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                api_key: "ppKeBXq42XUYmR7o6NyW6Q",
+                q_organization_domains: domain,
+                position_title:   "C-level" // Include person_seniorities as requested
+            })
+        });
+
+        const managerData = await response.json();
+        console.log('C level data response:', managerData); // Debug log
         displayManagers(managerData); // New function for displaying manager data
     } catch (error) {
         console.error('Error fetching managers:', error);
