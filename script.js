@@ -310,7 +310,8 @@ async function fetcClevel() {
             body: JSON.stringify({
                 api_key: "ppKeBXq42XUYmR7o6NyW6Q",
                 q_organization_domains: domain,
-                position_title:   "C-level" // Include person_seniorities as requested
+                position_title:   "C-level" ,
+                person_seniorities: ["founder","CEO"] // Include person_seniorities as requested
             })
         });
 
