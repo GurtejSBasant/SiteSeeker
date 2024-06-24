@@ -153,7 +153,7 @@ async function fetchYcombinatorData(query, companiesId) {
             body: JSON.stringify({ companiesId: companiesId })
         });
         const data = await response.json();
-        displayCompanyDetails(data);
+        displayCompanyDetails(data);             
     } catch (error) {
         console.error('Error fetching Ycombinator data:', error);
     }
@@ -212,7 +212,7 @@ async function searchCompanies(query, currentPage) {
     }
 
     try {
-        const response = await fetch(`https://stagingsourcebae.shethink.in/scraper?query=${query}&page=${currentPage}&hitsPerPage=10`, {
+        const response = await fetch(`https://stagingsourcebae.shethink.in/scraper/algolia?query=${query}&page=${currentPage}&hitsPerPage=10`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
