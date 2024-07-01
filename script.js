@@ -21,8 +21,8 @@ async function search() {
         console.log("searchdata:",searchData)
         console.log('Initial search response:', searchData); // Debug log
 
-        if (!Array.isArray(searchData.jobs) || searchData.jobs.length === 0) {
-            dataDisplay.innerHTML = 'No results found on this website. Searching on other websites...';
+        if (!Array.isArray(searchData) || searchData === 0) {
+            // dataDisplay.innerHTML = 'No results found on this website. Searching on other websites...';
             await searchCompanies(searchTerm, currentPage);
         } else {
             displayData(searchData);
@@ -64,20 +64,22 @@ function displayData(response) {
     const dataDisplay = document.getElementById('dataDisplay');
     dataDisplay.innerHTML = '';
 
-    if (!response || !response.jobs || response.jobs.length === 0) {
-        dataDisplay.innerHTML = 'No results found';
+    if (!response || response.length === 0) {
+        // dataDisplay.innerHTML = 'No results found';
         return;
     }
 
-    response.jobs.forEach(jobData => {
+    response.forEach(jobData => {
+        console.log("jobData:", jobData);
+        
         const jobDiv = document.createElement('div');
         jobDiv.classList.add('job-item');
 
         const jobContent = `
             <h2>${jobData.title}</h2>
-            <p>Company: ${jobData.company}</p>
-            <p>Location: ${jobData.location}</p>
-            <p>Tags: ${jobData.tags}</p>
+            <p>Company: ${jobData.company.replace(/\n/g, '').replace(/\s\s+/g, ' ')}</p>
+            <p>Location: ${jobData.location.replace(/\n/g, '').replace(/\s\s+/g, ' ')}</p>
+            <p>Tags: ${jobData.tags.replace(/\n/g, '').replace(/\s\s+/g, ' ')}</p>
             <a href="${jobData.link}" target="_blank">Link</a>
         `;
 
@@ -85,6 +87,7 @@ function displayData(response) {
         dataDisplay.appendChild(jobDiv);
     });
 }
+
 
 async function fetchEmployeeEmail(apiKey, fullName, companyDomain) {
     try {
@@ -184,10 +187,11 @@ function displayCompanyDetails(data) {
             company.jobs.forEach(job => {
                 const jobBox = document.createElement('div');
                 jobBox.classList.add('job-box');
+                const skillsTags = job.skills.map(skill => skill.name).join(', ');
 
                 const jobContent = `
                     <p><strong>Title:</strong> ${job.title}</p>
-                    <p><strong>Skills:</strong> ${job.skillsTags}</p>
+                    <p><strong>Skills:</strong> ${skillsTags}</p>
                     <p><strong>Minimum Experience:</strong> ${job.pretty_min_experience}</p>
                     <p><strong>Salary Range:</strong> ${job.pretty_salary_range}</p>
                     <p><strong>Equity Range:</strong> ${job.pretty_equity_range}</p>
